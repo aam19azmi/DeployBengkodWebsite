@@ -3,138 +3,199 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Prediksi Tingkat Obesitas</title>
+  <title>Prediksi Obesitas</title>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      max-width: 600px;
-      margin: 40px auto;
-      padding: 0 20px;
-      background: #f9f9f9;
+      font-family: 'Segoe UI', sans-serif;
+      background: #eef2f7;
+      margin: 0;
+      padding: 40px 0;
+      display: flex;
+      justify-content: center;
     }
+
+    .container {
+      background: white;
+      width: 100%;
+      max-width: 700px;
+      border-radius: 12px;
+      padding: 30px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    }
+
     h1 {
       text-align: center;
+      color: #007bff;
+      margin-bottom: 30px;
+    }
+
+    fieldset {
+      border: none;
+      margin-bottom: 25px;
+      padding: 0;
+    }
+
+    legend {
+      font-weight: bold;
+      margin-bottom: 10px;
       color: #333;
     }
-    form {
-      background: #fff;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 0 10px #ccc;
-    }
+
     label {
       display: block;
       margin-top: 15px;
-      font-weight: bold;
+      font-weight: 500;
+      color: #444;
     }
+
     input, select {
       width: 100%;
-      padding: 8px;
-      margin-top: 6px;
-      border-radius: 4px;
-      border: 1px solid #aaa;
-    }
-    button {
-      margin-top: 20px;
-      width: 100%;
       padding: 10px;
+      margin-top: 5px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 15px;
+    }
+
+    .radio-group {
+      margin-top: 5px;
+    }
+
+    .radio-group label {
+      display: inline-block;
+      margin-right: 20px;
+      font-weight: normal;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 25px;
       background: #007bff;
       color: white;
       border: none;
-      border-radius: 4px;
+      border-radius: 6px;
       font-size: 16px;
       cursor: pointer;
+      transition: background 0.2s ease-in-out;
     }
+
     button:hover {
       background: #0056b3;
     }
+
     #result {
-      margin-top: 20px;
+      margin-top: 25px;
       padding: 15px;
-      background: #e7f3fe;
-      border: 1px solid #b3d4fc;
+      background: #d4edda;
+      border: 1px solid #c3e6cb;
       border-radius: 6px;
+      color: #155724;
       font-weight: bold;
-      color: #00529b;
+      display: none;
     }
   </style>
 </head>
 <body>
+  <div class="container">
+    <h1>Prediksi Tingkat Obesitas</h1>
 
-  <h1>Prediksi Tingkat Obesitas</h1>
+    <form id="obesityForm">
+      <fieldset>
+        <legend>Data Pribadi</legend>
+        <label for="Gender">Jenis Kelamin</label>
+        <select id="Gender" name="Gender" required>
+          <option value="">-- Pilih --</option>
+          <option value="Female">Perempuan</option>
+          <option value="Male">Laki-laki</option>
+        </select>
 
-  <form id="obesityForm">
-    <label for="Gender">Jenis Kelamin</label>
-    <select id="Gender" name="Gender" required>
-      <option value="Female">Perempuan</option>
-      <option value="Male">Laki-laki</option>
-    </select>
+        <label for="Age">Usia (tahun)</label>
+        <input type="number" id="Age" name="Age" min="5" max="100" required placeholder="Contoh: 25" />
 
-    <label for="Age">Usia</label>
-    <input type="number" id="Age" name="Age" min="1" required />
+        <label for="Height">Tinggi Badan (cm)</label>
+        <input type="number" id="Height" name="Height" min="100" required placeholder="Contoh: 165" />
 
-    <label for="Height">Tinggi Badan (cm)</label>
-    <input type="number" id="Height" name="Height" min="50" required />
+        <label for="Weight">Berat Badan (kg)</label>
+        <input type="number" id="Weight" name="Weight" min="30" required placeholder="Contoh: 60" />
+      </fieldset>
 
-    <label for="Weight">Berat Badan (kg)</label>
-    <input type="number" id="Weight" name="Weight" min="10" required />
+      <fieldset>
+        <legend>Kebiasaan dan Pola Hidup</legend>
 
-    <label for="family_history_with_overweight">Riwayat Keluarga Kelebihan Berat Badan (0/1)</label>
-    <input type="number" id="family_history_with_overweight" name="family_history_with_overweight" min="0" max="1" required />
+        <label>Riwayat Kelebihan Berat Badan dalam Keluarga</label>
+        <div class="radio-group">
+          <label><input type="radio" name="family_history_with_overweight" value="1" required> Ya</label>
+          <label><input type="radio" name="family_history_with_overweight" value="0"> Tidak</label>
+        </div>
 
-    <label for="FAVC">Sering Konsumsi Makanan Tinggi Kalori (0/1)</label>
-    <input type="number" id="FAVC" name="FAVC" min="0" max="1" required />
+        <label>Sering Makan Makanan Tinggi Kalori?</label>
+        <div class="radio-group">
+          <label><input type="radio" name="FAVC" value="1" required> Ya</label>
+          <label><input type="radio" name="FAVC" value="0"> Tidak</label>
+        </div>
 
-    <label for="FCVC">Jumlah Konsumsi Sayur (integer)</label>
-    <input type="number" id="FCVC" name="FCVC" min="0" required />
+        <label for="FCVC">Jumlah Konsumsi Sayur per Hari</label>
+        <input type="number" id="FCVC" name="FCVC" min="0" required placeholder="Contoh: 2" />
 
-    <label for="NCP">Jumlah Makan Besar Per Hari</label>
-    <input type="number" id="NCP" name="NCP" min="1" required />
+        <label for="NCP">Jumlah Makan Besar per Hari</label>
+        <input type="number" id="NCP" name="NCP" min="1" max="10" required placeholder="Contoh: 3" />
 
-    <label for="CAEC">Sering Makan Camilan</label>
-    <select id="CAEC" name="CAEC" required>
-      <option value="No">Tidak</option>
-      <option value="Sometimes">Kadang-kadang</option>
-      <option value="Frequently">Sering</option>
-      <option value="Always">Selalu</option>
-    </select>
+        <label for="CAEC">Camilan di Antara Waktu Makan?</label>
+        <select id="CAEC" name="CAEC" required>
+          <option value="">-- Pilih --</option>
+          <option value="No">Tidak</option>
+          <option value="Sometimes">Kadang-kadang</option>
+          <option value="Frequently">Sering</option>
+          <option value="Always">Selalu</option>
+        </select>
 
-    <label for="SMOKE">Merokok (0/1)</label>
-    <input type="number" id="SMOKE" name="SMOKE" min="0" max="1" required />
+        <label>Apakah Anda Merokok?</label>
+        <div class="radio-group">
+          <label><input type="radio" name="SMOKE" value="1" required> Ya</label>
+          <label><input type="radio" name="SMOKE" value="0"> Tidak</label>
+        </div>
 
-    <label for="CH2O">Jumlah Minum Air Per Hari (liter)</label>
-    <input type="number" id="CH2O" name="CH2O" min="0" step="0.1" required />
+        <label for="CH2O">Jumlah Minum Air (liter/hari)</label>
+        <input type="number" id="CH2O" name="CH2O" step="0.1" min="0" max="10" required placeholder="Contoh: 2.5" />
 
-    <label for="SCC">Memantau Asupan Kalori (0/1)</label>
-    <input type="number" id="SCC" name="SCC" min="0" max="1" required />
+        <label>Memantau Asupan Kalori Harian?</label>
+        <div class="radio-group">
+          <label><input type="radio" name="SCC" value="1" required> Ya</label>
+          <label><input type="radio" name="SCC" value="0"> Tidak</label>
+        </div>
 
-    <label for="FAF">Frekuensi Aktivitas Fisik</label>
-    <input type="number" id="FAF" name="FAF" min="0" step="0.1" required />
+        <label for="FAF">Frekuensi Aktivitas Fisik (jam/minggu)</label>
+        <input type="number" id="FAF" name="FAF" step="0.1" required placeholder="Contoh: 3.5" />
 
-    <label for="TUE">Waktu Pakai Perangkat Teknologi (jam)</label>
-    <input type="number" id="TUE" name="TUE" min="0" required />
+        <label for="TUE">Waktu Penggunaan Teknologi (jam/hari)</label>
+        <input type="number" id="TUE" name="TUE" required placeholder="Contoh: 4" />
 
-    <label for="CALC">Sering Konsumsi Alkohol</label>
-    <select id="CALC" name="CALC" required>
-      <option value="No">Tidak</option>
-      <option value="Sometimes">Kadang-kadang</option>
-      <option value="Frequently">Sering</option>
-      <option value="Always">Selalu</option>
-    </select>
+        <label for="CALC">Konsumsi Alkohol</label>
+        <select id="CALC" name="CALC" required>
+          <option value="">-- Pilih --</option>
+          <option value="No">Tidak</option>
+          <option value="Sometimes">Kadang-kadang</option>
+          <option value="Frequently">Sering</option>
+          <option value="Always">Selalu</option>
+        </select>
 
-    <label for="MTRANS">Jenis Transportasi</label>
-    <select id="MTRANS" name="MTRANS" required>
-      <option value="Walking">Jalan Kaki</option>
-      <option value="Bike">Sepeda</option>
-      <option value="Motorbike">Motor</option>
-      <option value="Public_Transportation">Transportasi Umum</option>
-      <option value="Car">Mobil</option>
-    </select>
+        <label for="MTRANS">Jenis Transportasi</label>
+        <select id="MTRANS" name="MTRANS" required>
+          <option value="">-- Pilih --</option>
+          <option value="Walking">Jalan Kaki</option>
+          <option value="Bike">Sepeda</option>
+          <option value="Motorbike">Motor</option>
+          <option value="Public_Transportation">Transportasi Umum</option>
+          <option value="Car">Mobil</option>
+        </select>
+      </fieldset>
 
-    <button type="submit">Prediksi</button>
-  </form>
+      <button type="submit">Prediksi</button>
+    </form>
 
-  <div id="result"></div>
+    <div id="result"></div>
+  </div>
 
   <script>
     const form = document.getElementById('obesityForm');
@@ -146,33 +207,28 @@
       const formData = new FormData(form);
       let data = {};
       formData.forEach((value, key) => {
-        if(['Age','Height','Weight','family_history_with_overweight','FAVC','FCVC','NCP','SMOKE','CH2O','SCC','FAF','TUE'].includes(key)) {
+        if (['Age','Height','Weight','family_history_with_overweight','FAVC','FCVC','NCP','SMOKE','CH2O','SCC','FAF','TUE'].includes(key)) {
           data[key] = Number(value);
         } else {
-          data[key] = String(value).trim();  // ⬅️ Konversi ke lowercase
+          data[key] = value.trim();
         }
       });
 
       try {
         const response = await fetch('https://deploybengkod-production.up.railway.app/predict', {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(data)
         });
 
-        if (!response.ok) throw new Error('Gagal memproses prediksi');
-
         const result = await response.json();
-        resultDiv.textContent = result.prediction ? 
-          `Prediksi Tingkat Obesitas: ${result.prediction}` :
-          `Error dari server: ${result.detail || 'Terjadi kesalahan'}`;
+        resultDiv.style.display = 'block';
+        resultDiv.textContent = result.prediction ? `Prediksi Tingkat Obesitas: ${result.prediction}` : `Error: ${result.detail || 'Terjadi kesalahan'}`;
       } catch (err) {
-        resultDiv.textContent = 'Error: ' + err.message;
+        resultDiv.style.display = 'block';
+        resultDiv.textContent = 'Terjadi kesalahan: ' + err.message;
       }
     });
   </script>
-
 </body>
 </html>
