@@ -165,7 +165,9 @@
         if (!response.ok) throw new Error('Gagal memproses prediksi');
 
         const result = await response.json();
-        resultDiv.textContent = `Prediksi Tingkat Obesitas: ${result.prediction}`;
+        resultDiv.textContent = result.prediction ? 
+          `Prediksi Tingkat Obesitas: ${result.prediction}` :
+          `Error dari server: ${result.detail || 'Terjadi kesalahan'}`;
       } catch (err) {
         resultDiv.textContent = 'Error: ' + err.message;
       }
