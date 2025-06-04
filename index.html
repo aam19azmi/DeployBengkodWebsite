@@ -146,11 +146,10 @@
       const formData = new FormData(form);
       let data = {};
       formData.forEach((value, key) => {
-        // convert numbers where appropriate
         if(['Age','Height','Weight','family_history_with_overweight','FAVC','FCVC','NCP','SMOKE','CH2O','SCC','FAF','TUE'].includes(key)) {
           data[key] = Number(value);
         } else {
-          data[key] = value;
+          data[key] = String(value).toLowerCase();  // ⬅️ Konversi ke lowercase
         }
       });
 
