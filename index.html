@@ -149,7 +149,7 @@
         if(['Age','Height','Weight','family_history_with_overweight','FAVC','FCVC','NCP','SMOKE','CH2O','SCC','FAF','TUE'].includes(key)) {
           data[key] = Number(value);
         } else {
-          data[key] = String(value).toLowerCase();  // ⬅️ Konversi ke lowercase
+          data[key] = String(value).trim();  // ⬅️ Konversi ke lowercase
         }
       });
 
