@@ -125,14 +125,14 @@
 
         <label>Riwayat Kelebihan Berat Badan dalam Keluarga</label>
         <div class="radio-group">
-          <label><input type="radio" name="family_history_with_overweight" value="yes" required> Ya</label>
-          <label><input type="radio" name="family_history_with_overweight" value="no"> Tidak</label>
+          <label><input type="radio" name="family_history_with_overweight" value="1" required> Ya</label>
+          <label><input type="radio" name="family_history_with_overweight" value="0"> Tidak</label>
         </div>
 
         <label>Sering Makan Makanan Tinggi Kalori?</label>
         <div class="radio-group">
-          <label><input type="radio" name="FAVC" value="yes" required> Ya</label>
-          <label><input type="radio" name="FAVC" value="no"> Tidak</label>
+          <label><input type="radio" name="FAVC" value="1" required> Ya</label>
+          <label><input type="radio" name="FAVC" value="0"> Tidak</label>
         </div>
 
         <label for="FCVC">Jumlah Konsumsi Sayur per Hari</label>
@@ -144,7 +144,7 @@
         <label for="CAEC">Camilan di Antara Waktu Makan?</label>
         <select id="CAEC" name="CAEC" required>
           <option value="">-- Pilih --</option>
-          <option value="no">Tidak</option>
+          <option value="No">Tidak</option>
           <option value="Sometimes">Kadang-kadang</option>
           <option value="Frequently">Sering</option>
           <option value="Always">Selalu</option>
@@ -152,8 +152,8 @@
 
         <label>Apakah Anda Merokok?</label>
         <div class="radio-group">
-          <label><input type="radio" name="SMOKE" value="yes" required> Ya</label>
-          <label><input type="radio" name="SMOKE" value="no"> Tidak</label>
+          <label><input type="radio" name="SMOKE" value="1" required> Ya</label>
+          <label><input type="radio" name="SMOKE" value="0"> Tidak</label>
         </div>
 
         <label for="CH2O">Jumlah Minum Air (liter/hari)</label>
@@ -161,8 +161,8 @@
 
         <label>Memantau Asupan Kalori Harian?</label>
         <div class="radio-group">
-          <label><input type="radio" name="SCC" value="yes" required> Ya</label>
-          <label><input type="radio" name="SCC" value="no"> Tidak</label>
+          <label><input type="radio" name="SCC" value="1" required> Ya</label>
+          <label><input type="radio" name="SCC" value="0"> Tidak</label>
         </div>
 
         <label for="FAF">Frekuensi Aktivitas Fisik (jam/minggu)</label>
@@ -174,7 +174,7 @@
         <label for="CALC">Konsumsi Alkohol</label>
         <select id="CALC" name="CALC" required>
           <option value="">-- Pilih --</option>
-          <option value="no">Tidak</option>
+          <option value="No">Tidak</option>
           <option value="Sometimes">Kadang-kadang</option>
           <option value="Frequently">Sering</option>
           <option value="Always">Selalu</option>
@@ -187,7 +187,7 @@
           <option value="Bike">Sepeda</option>
           <option value="Motorbike">Motor</option>
           <option value="Public_Transportation">Transportasi Umum</option>
-          <option value="Automobile">Mobil</option>
+          <option value="Car">Mobil</option>
         </select>
       </fieldset>
 
@@ -207,11 +207,9 @@
       const formData = new FormData(form);
       let data = {};
       formData.forEach((value, key) => {
-        // Kolom numerik yang dikonversi ke number
-        if (['Age','Height','Weight','FCVC','NCP','CH2O','FAF','TUE'].includes(key)) {
+        if (['Age','Height','Weight','family_history_with_overweight','FAVC','FCVC','NCP','SMOKE','CH2O','SCC','FAF','TUE'].includes(key)) {
           data[key] = Number(value);
         } else {
-          // Kolom kategorikal tetap string (yes/no, pilihan dropdown)
           data[key] = value.trim();
         }
       });
@@ -225,9 +223,7 @@
 
         const result = await response.json();
         resultDiv.style.display = 'block';
-        resultDiv.textContent = result.prediction ? 
-          `Prediksi Tingkat Obesitas: ${result.prediction}` : 
-          `Error: ${result.detail || 'Terjadi kesalahan'}`;
+        resultDiv.textContent = result.prediction ? `Prediksi Tingkat Obesitas: ${result.prediction}` : `Error: ${result.detail || 'Terjadi kesalahan'}`;
       } catch (err) {
         resultDiv.style.display = 'block';
         resultDiv.textContent = 'Terjadi kesalahan: ' + err.message;
