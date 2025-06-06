@@ -5,6 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Prediksi Obesitas</title>
   <style>
+    /* ========== Global Styles ========== */
+    * {
+      box-sizing: border-box;
+    }
     body {
       font-family: 'Segoe UI', sans-serif;
       background: #eef2f7;
@@ -12,87 +16,209 @@
       padding: 40px 0;
       display: flex;
       justify-content: center;
+      overflow-x: hidden;
     }
-
     .container {
       background: white;
       width: 100%;
-      max-width: 700px;
+      max-width: 800px;
       border-radius: 12px;
-      padding: 30px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      padding: 30px 40px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      position: relative;
     }
-
     h1 {
       text-align: center;
       color: #007bff;
-      margin-bottom: 30px;
+      margin-bottom: 20px;
+      font-size: 2rem;
     }
-
+    .toggle-mode {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 25px;
+    }
+    .toggle-mode label {
+      margin-right: 20px;
+      font-weight: 600;
+      cursor: pointer;
+      color: #333;
+    }
     fieldset {
       border: none;
       margin-bottom: 25px;
       padding: 0;
     }
-
     legend {
       font-weight: bold;
       margin-bottom: 10px;
       color: #333;
+      font-size: 1.2rem;
+      border-bottom: 2px solid #ccc;
+      padding-bottom: 5px;
     }
-
     label {
       display: block;
       margin-top: 15px;
       font-weight: 500;
       color: #444;
+      font-size: 0.95rem;
     }
-
+    label .info {
+      font-weight: normal;
+      font-style: italic;
+      color: #666;
+      font-size: 0.85rem;
+    }
+    label .tooltip-icon {
+      margin-left: 4px;
+      color: #007bff;
+      cursor: help;
+      font-style: normal;
+    }
     input, select {
       width: 100%;
-      padding: 10px;
+      padding: 12px;
       margin-top: 5px;
       border-radius: 6px;
       border: 1px solid #ccc;
-      font-size: 15px;
+      font-size: 1rem;
+      transition: border 0.2s;
     }
-
+    input:focus, select:focus {
+      outline: none;
+      border-color: #007bff;
+    }
     .radio-group {
       margin-top: 5px;
     }
-
     .radio-group label {
       display: inline-block;
       margin-right: 20px;
       font-weight: normal;
+      color: #444;
+      cursor: pointer;
     }
-
+    .radio-group input {
+      margin-right: 6px;
+    }
+    .helper-text {
+      color: #666;
+      font-size: 0.85rem;
+      margin-top: 3px;
+    }
+    .error-message {
+      color: #c82333;
+      font-size: 0.85rem;
+      margin-top: 5px;
+      display: none;
+    }
+    /* Shake animation for invalid input */
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20%, 60%  { transform: translateX(-6px); }
+      40%, 80%  { transform: translateX(6px); }
+    }
+    .shake {
+      animation: shake 0.35s ease-in-out;
+    }
+    .input-error {
+      border-color: #c82333 !important;
+    }
+    /* Button */
     button {
       width: 100%;
-      padding: 12px;
-      margin-top: 25px;
+      padding: 14px;
+      margin-top: 20px;
       background: #007bff;
       color: white;
       border: none;
       border-radius: 6px;
-      font-size: 16px;
+      font-size: 1.1rem;
       cursor: pointer;
       transition: background 0.2s ease-in-out;
+      position: relative;
     }
-
     button:hover {
       background: #0056b3;
     }
-
+    button:disabled {
+      background: #999;
+      cursor: not-allowed;
+    }
+    /* Spinner for loading */
+    .spinner {
+      border: 3px solid rgba(255, 255, 255, 0.5);
+      border-top: 3px solid white;
+      border-radius: 50%;
+      width: 18px;
+      height: 18px;
+      animation: spin 1s linear infinite;
+      display: inline-block;
+      vertical-align: middle;
+      margin-left: 8px;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    /* ========== Slide-Toggle Sections ========== */
+    .numeric-section,
+    .category-section {
+      max-height: 0;
+      overflow: hidden;
+      opacity: 0;
+      transition: max-height 0.4s ease, opacity 0.4s ease;
+    }
+    .numeric-section.visible,
+    .category-section.visible {
+      max-height: 1000px; /* cukup besar agar seluruh content bisa tampil */
+      opacity: 1;
+    }
+    /* ========== Prediction Result Styles ========== */
     #result {
       margin-top: 25px;
-      padding: 15px;
-      background: #d4edda;
-      border: 1px solid #c3e6cb;
-      border-radius: 6px;
-      color: #155724;
+      padding: 20px;
+      background: #f0f8ff;
+      border: 2px solid #007bff;
+      border-radius: 8px;
+      color: #004085;
       font-weight: bold;
+      font-size: 1.1rem;
       display: none;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeInUp 0.6s forwards;
+    }
+    /* Fade-in Up keyframes */
+    @keyframes fadeInUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    /* Pulse animation when result appears */
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.02); }
+      100% { transform: scale(1); }
+    }
+    .pulse {
+      animation: pulse 1s ease-in-out;
+    }
+    /* ========== Responsive Adjustments ========== */
+    @media (max-width: 480px) {
+      .container {
+        padding: 20px;
+      }
+      h1 {
+        font-size: 1.5rem;
+      }
+      label {
+        font-size: 0.9rem;
+      }
+      input, select, button {
+        font-size: 0.95rem;
+      }
     }
   </style>
 </head>
@@ -100,78 +226,252 @@
   <div class="container">
     <h1>Prediksi Tingkat Obesitas</h1>
 
-    <form id="obesityForm">
+    <!-- Mode Toggle: Ahli vs Umum -->
+    <div class="toggle-mode" role="radiogroup" aria-label="Pilih Mode Input">
+      <label>
+        <input type="radio" name="inputMode" value="expert" checked>
+        Mode Ahli / Peneliti
+      </label>
+      <label>
+        <input type="radio" name="inputMode" value="general">
+        Mode Umum / Masyarakat
+      </label>
+    </div>
+
+    <form id="obesityForm" novalidate>
       <fieldset>
         <legend>Data Pribadi</legend>
-        <label for="Gender">Jenis Kelamin</label>
+
+        <label for="Gender">
+          Jenis Kelamin 
+          <span class="info">(Pilih jenis kelamin Anda)</span>
+        </label>
         <select id="Gender" name="Gender" required>
           <option value="">-- Pilih --</option>
           <option value="Female">Perempuan</option>
           <option value="Male">Laki-laki</option>
         </select>
+        <div class="error-message" id="error-Gender">Harap pilih jenis kelamin.</div>
 
-        <label for="Age">Usia (tahun)</label>
+        <label for="Age">
+          Usia (tahun) 
+          <span class="info">(Antara 5–100 tahun)</span>
+        </label>
         <input type="number" id="Age" name="Age" min="5" max="100" required placeholder="Contoh: 25" />
+        <div class="error-message" id="error-Age">Usia harus diisi antara 5–100 tahun.</div>
 
-        <label for="Height">Tinggi Badan (cm)</label>
-        <input type="number" id="Height" name="Height" min="100" required placeholder="Contoh: 165" />
+        <label for="Height">
+          Tinggi Badan (cm) 
+          <span class="info">(Antara 100–250 cm)</span>
+        </label>
+        <input type="number" id="Height" name="Height" min="100" max="250" required placeholder="Contoh: 165" />
+        <div class="error-message" id="error-Height">Masukkan tinggi antara 100–250 cm.</div>
 
-        <label for="Weight">Berat Badan (kg)</label>
-        <input type="number" id="Weight" name="Weight" min="30" required placeholder="Contoh: 60" />
+        <label for="Weight">
+          Berat Badan (kg) 
+          <span class="info">(Antara 30–200 kg)</span>
+        </label>
+        <input type="number" id="Weight" name="Weight" min="30" max="200" required placeholder="Contoh: 60" />
+        <div class="error-message" id="error-Weight">Masukkan berat antara 30–200 kg.</div>
       </fieldset>
 
       <fieldset>
         <legend>Kebiasaan dan Pola Hidup</legend>
 
-        <label>Riwayat Kelebihan Berat Badan dalam Keluarga</label>
-        <div class="radio-group">
-          <label><input type="radio" name="family_history_with_overweight" value="yes" required> Ya</label>
-          <label><input type="radio" name="family_history_with_overweight" value="no"> Tidak</label>
+        <!-- Riwayat Keluarga -->
+        <fieldset>
+          <legend>Riwayat Keluarga</legend>
+          <label>
+            Adakah anggota keluarga dengan riwayat kelebihan berat badan?
+            <span class="info">(Pilih Ya atau Tidak)</span>
+          </label>
+          <div class="radio-group">
+            <label><input type="radio" name="family_history_with_overweight" value="yes" required> Ya</label>
+            <label><input type="radio" name="family_history_with_overweight" value="no"> Tidak</label>
+          </div>
+          <div class="error-message" id="error-family_history_with_overweight">Harap pilih opsi ini.</div>
+        </fieldset>
+
+        <!-- Makanan Tinggi Kalori -->
+        <fieldset>
+          <legend>Makanan Tinggi Kalori</legend>
+          <label>
+            Apakah Anda sering mengonsumsi makanan tinggi kalori?
+            <span class="info">(Pilih Ya atau Tidak)</span>
+          </label>
+          <div class="radio-group">
+            <label><input type="radio" name="FAVC" value="yes" required> Ya</label>
+            <label><input type="radio" name="FAVC" value="no"> Tidak</label>
+          </div>
+          <div class="error-message" id="error-FAVC">Harap pilih opsi ini.</div>
+        </fieldset>
+
+        <!-- Seksi Input Numerik (Mode Ahli/Peneliti) -->
+        <div class="numeric-section">
+          <label for="FCVC">
+            Konsumsi Sayur (porsi/hari) 
+            <span class="tooltip-icon" title="Frekuensi Konsumsi Sayur per Hari">ⓘ</span>
+            <span class="info">(Angka desimal, ex. 2.45)</span>
+          </label>
+          <input type="number" id="FCVC" name="FCVC" step="0.01" min="0" max="10" placeholder="Contoh: 2.45" />
+          <div class="helper-text">Masukkan rata-rata porsi sayur per hari.</div>
+          <div class="error-message" id="error-FCVC">Harap isi nilai antara 0–10.</div>
+
+          <label for="NCP">
+            Jumlah Makan Besar (kali/hari) 
+            <span class="tooltip-icon" title="Jumlah rata-rata makan besar per hari">ⓘ</span>
+            <span class="info">(Angka desimal, ex. 3.00)</span>
+          </label>
+          <input type="number" id="NCP" name="NCP" step="0.01" min="1" max="10" placeholder="Contoh: 3.00" />
+          <div class="helper-text">Masukkan jumlah rata-rata makan besar per hari.</div>
+          <div class="error-message" id="error-NCP">Harap isi nilai antara 1–10.</div>
+
+          <label for="CH2O">
+            Konsumsi Air (liter/hari) 
+            <span class="tooltip-icon" title="Jumlah rata-rata konsumsi air per hari">ⓘ</span>
+            <span class="info">(Angka desimal, ex. 2.75)</span>
+          </label>
+          <input type="number" id="CH2O" name="CH2O" step="0.01" min="0" max="10" placeholder="Contoh: 2.75" />
+          <div class="helper-text">Masukkan rata-rata konsumsi air per hari.</div>
+          <div class="error-message" id="error-CH2O">Harap isi nilai antara 0–10.</div>
+
+          <label for="FAF">
+            Waktu Olahraga (jam/minggu) 
+            <span class="tooltip-icon" title="Rata-rata jam aktivitas fisik per minggu">ⓘ</span>
+            <span class="info">(Angka desimal, ex. 3.50)</span>
+          </label>
+          <input type="number" id="FAF" name="FAF" step="0.01" min="0" max="20" placeholder="Contoh: 3.50" />
+          <div class="helper-text">Masukkan rata-rata jam berolahraga per minggu.</div>
+          <div class="error-message" id="error-FAF">Harap isi nilai antara 0–20.</div>
+
+          <label for="TUE">
+            Waktu Layar (jam/hari) 
+            <span class="tooltip-icon" title="Rata-rata jam menggunakan gadget per hari">ⓘ</span>
+            <span class="info">(Angka desimal, ex. 4.25)</span>
+          </label>
+          <input type="number" id="TUE" name="TUE" step="0.01" min="0" max="24" placeholder="Contoh: 4.25" />
+          <div class="helper-text">Masukkan rata-rata jam menggunakan gadget per hari.</div>
+          <div class="error-message" id="error-TUE">Harap isi nilai antara 0–24.</div>
         </div>
 
-        <label>Sering Makan Makanan Tinggi Kalori?</label>
-        <div class="radio-group">
-          <label><input type="radio" name="FAVC" value="yes" required> Ya</label>
-          <label><input type="radio" name="FAVC" value="no"> Tidak</label>
+        <!-- Seksi Input Kategori (Mode Umum/Masyarakat) -->
+        <div class="category-section">
+          <label for="FCVC_category">
+            Konsumsi Sayur (per hari)
+            <span class="info">(Pilih kategori)</span>
+          </label>
+          <select id="FCVC_category" name="FCVC_category">
+            <option value="">-- Pilih --</option>
+            <option value="1">🟢 Jarang (0–2 porsi)</option>
+            <option value="2">🟡 Kadang-kadang (2–3 porsi)</option>
+            <option value="3">🟠 Sering (3–5 porsi)</option>
+            <option value="4">🔴 Sangat Sering (>5 porsi)</option>
+          </select>
+          <div class="error-message" id="error-FCVC_category">Pilih satu kategori.</div>
+
+          <label for="NCP_category">
+            Makan Besar (kali/hari)
+            <span class="info">(Pilih kategori)</span>
+          </label>
+          <select id="NCP_category" name="NCP_category">
+            <option value="">-- Pilih --</option>
+            <option value="1">1 kali</option>
+            <option value="2">2 kali</option>
+            <option value="3">3 kali</option>
+            <option value="4">4 kali</option>
+            <option value="5">≥5 kali</option>
+          </select>
+          <div class="error-message" id="error-NCP_category">Pilih satu kategori.</div>
+
+          <label for="CH2O_category">
+            Konsumsi Air (liter/hari)
+            <span class="info">(Pilih kategori)</span>
+          </label>
+          <select id="CH2O_category" name="CH2O_category">
+            <option value="">-- Pilih --</option>
+            <option value="1">🟢 0–1 liter</option>
+            <option value="2">🟡 1–2 liter</option>
+            <option value="3">🟠 2–3 liter</option>
+            <option value="4">🔴 3–4 liter</option>
+            <option value="5">🔴 >4 liter</option>
+          </select>
+          <div class="error-message" id="error-CH2O_category">Pilih satu kategori.</div>
+
+          <label for="FAF_category">
+            Waktu Olahraga (jam/minggu)
+            <span class="info">(Pilih kategori)</span>
+          </label>
+          <select id="FAF_category" name="FAF_category">
+            <option value="">-- Pilih --</option>
+            <option value="1">🟢 0–1 jam</option>
+            <option value="2">🟡 1–3 jam</option>
+            <option value="3">🟠 3–5 jam</option>
+            <option value="4">🔴 >5 jam</option>
+          </select>
+          <div class="error-message" id="error-FAF_category">Pilih satu kategori.</div>
+
+          <label for="TUE_category">
+            Waktu Layar (jam/hari)
+            <span class="info">(Pilih kategori)</span>
+          </label>
+          <select id="TUE_category" name="TUE_category">
+            <option value="">-- Pilih --</option>
+            <option value="1">🟢 0–1 jam</option>
+            <option value="2">🟡 1–3 jam</option>
+            <option value="3">🟠 3–5 jam</option>
+            <option value="4">🔴 >5 jam</option>
+          </select>
+          <div class="error-message" id="error-TUE_category">Pilih satu kategori.</div>
         </div>
 
-        <label for="FCVC">Jumlah Konsumsi Sayur per Hari</label>
-        <input type="number" id="FCVC" name="FCVC" min="0" required placeholder="Contoh: 2" />
+        <!-- Camilan -->
+        <fieldset>
+          <legend>Camilan</legend>
+          <label for="CAEC">
+            Apakah Anda ngemil di antara waktu makan?
+            <span class="info">(Pilih satu)</span>
+          </label>
+          <select id="CAEC" name="CAEC" required>
+            <option value="">-- Pilih --</option>
+            <option value="no">Tidak</option>
+            <option value="Sometimes">Kadang-kadang</option>
+            <option value="Frequently">Sering</option>
+            <option value="Always">Selalu</option>
+          </select>
+          <div class="error-message" id="error-CAEC">Harap pilih opsi ini.</div>
+        </fieldset>
 
-        <label for="NCP">Jumlah Makan Besar per Hari</label>
-        <input type="number" id="NCP" name="NCP" min="1" max="10" required placeholder="Contoh: 3" />
+        <!-- Merokok -->
+        <fieldset>
+          <legend>Merokok</legend>
+          <label>
+            Apakah Anda merokok?
+            <span class="info">(Pilih Ya atau Tidak)</span>
+          </label>
+          <div class="radio-group">
+            <label><input type="radio" name="SMOKE" value="yes" required> Ya</label>
+            <label><input type="radio" name="SMOKE" value="no"> Tidak</label>
+          </div>
+          <div class="error-message" id="error-SMOKE">Harap pilih opsi ini.</div>
+        </fieldset>
 
-        <label for="CAEC">Camilan di Antara Waktu Makan?</label>
-        <select id="CAEC" name="CAEC" required>
+        <!-- Pantau Kalori -->
+        <label for="SCC">
+          Memantau Asupan Kalori Harian?
+          <span class="info">(Pilih Ya atau Tidak)</span>
+        </label>
+        <select id="SCC" name="SCC" required>
           <option value="">-- Pilih --</option>
+          <option value="yes">Ya</option>
           <option value="no">Tidak</option>
-          <option value="Sometimes">Kadang-kadang</option>
-          <option value="Frequently">Sering</option>
-          <option value="Always">Selalu</option>
         </select>
+        <div class="error-message" id="error-SCC">Harap pilih opsi ini.</div>
 
-        <label>Apakah Anda Merokok?</label>
-        <div class="radio-group">
-          <label><input type="radio" name="SMOKE" value="yes" required> Ya</label>
-          <label><input type="radio" name="SMOKE" value="no"> Tidak</label>
-        </div>
-
-        <label for="CH2O">Jumlah Minum Air (liter/hari)</label>
-        <input type="number" id="CH2O" name="CH2O" step="0.1" min="0" max="10" required placeholder="Contoh: 2.5" />
-
-        <label>Memantau Asupan Kalori Harian?</label>
-        <div class="radio-group">
-          <label><input type="radio" name="SCC" value="yes" required> Ya</label>
-          <label><input type="radio" name="SCC" value="no"> Tidak</label>
-        </div>
-
-        <label for="FAF">Frekuensi Aktivitas Fisik (jam/minggu)</label>
-        <input type="number" id="FAF" name="FAF" step="0.1" required placeholder="Contoh: 3.5" />
-
-        <label for="TUE">Waktu Penggunaan Teknologi (jam/hari)</label>
-        <input type="number" id="TUE" name="TUE" required placeholder="Contoh: 4" />
-
-        <label for="CALC">Konsumsi Alkohol</label>
+        <!-- Konsumsi Alkohol -->
+        <label for="CALC">
+          Konsumsi Alkohol
+          <span class="info">(Pilih satu)</span>
+        </label>
         <select id="CALC" name="CALC" required>
           <option value="">-- Pilih --</option>
           <option value="no">Tidak</option>
@@ -179,8 +479,13 @@
           <option value="Frequently">Sering</option>
           <option value="Always">Selalu</option>
         </select>
+        <div class="error-message" id="error-CALC">Harap pilih opsi ini.</div>
 
-        <label for="MTRANS">Jenis Transportasi</label>
+        <!-- Transportasi -->
+        <label for="MTRANS">
+          Jenis Transportasi
+          <span class="info">(Pilih satu)</span>
+        </label>
         <select id="MTRANS" name="MTRANS" required>
           <option value="">-- Pilih --</option>
           <option value="Walking">Jalan Kaki</option>
@@ -189,36 +494,172 @@
           <option value="Public_Transportation">Transportasi Umum</option>
           <option value="Automobile">Mobil</option>
         </select>
+        <div class="error-message" id="error-MTRANS">Harap pilih opsi ini.</div>
       </fieldset>
 
-      <button type="submit">Prediksi</button>
+      <button type="submit" id="submitBtn">Prediksi</button>
     </form>
 
     <div id="result"></div>
   </div>
 
   <script>
+    // ===== Slide-toggle functions =====
+    function showSection(section) {
+      section.classList.add('visible');
+    }
+    function hideSection(section) {
+      section.classList.remove('visible');
+    }
+    function initSection(section) {
+      section.classList.remove('visible');
+    }
+
+    // Referensi elemen
+    const expertFields = document.querySelector('.numeric-section');
+    const generalFields = document.querySelector('.category-section');
+
+    // Inisialisasi: sembunyikan keduanya
+    initSection(expertFields);
+    initSection(generalFields);
+
+    // Toggle antara Mode Ahli (numeric) dan Mode Umum (kategori)
+    document.querySelectorAll('input[name="inputMode"]').forEach(radio => {
+      radio.addEventListener('change', () => {
+        if (radio.value === 'expert' && radio.checked) {
+          // Tampilkan numeric, sembunyikan kategori
+          showSection(expertFields);
+          hideSection(generalFields);
+
+          // Pasang required pada numeric, hapus pada kategori
+          ['FCVC','NCP','CH2O','FAF','TUE'].forEach(id => {
+            document.getElementById(id).setAttribute('required', 'required');
+          });
+          ['FCVC_category','NCP_category','CH2O_category','FAF_category','TUE_category'].forEach(id => {
+            document.getElementById(id).removeAttribute('required');
+          });
+        }
+        if (radio.value === 'general' && radio.checked) {
+          // Tampilkan kategori, sembunyikan numeric
+          showSection(generalFields);
+          hideSection(expertFields);
+
+          // Pasang required pada kategori, hapus pada numeric
+          ['FCVC_category','NCP_category','CH2O_category','FAF_category','TUE_category'].forEach(id => {
+            document.getElementById(id).setAttribute('required', 'required');
+          });
+          ['FCVC','NCP','CH2O','FAF','TUE'].forEach(id => {
+            document.getElementById(id).removeAttribute('required');
+          });
+        }
+      });
+    });
+
+    // Inisialisasi: set ke mode expert
+    document.querySelector('input[name="inputMode"][value="expert"]').checked = true;
+    showSection(expertFields);
+
+    // ===== Validasi dan Submit Form =====
     const form = document.getElementById('obesityForm');
     const resultDiv = document.getElementById('result');
+    const submitBtn = document.getElementById('submitBtn');
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
+      let valid = true;
 
-      const formData = new FormData(form);
-      let data = {};
-      formData.forEach((value, key) => {
-        if (['Age','Height','Weight','FCVC','NCP','CH2O','FAF','TUE'].includes(key)) {
-          let numValue = Number(value);
-          // Konversi tinggi dari cm ke meter
-          if (key === 'Height') {
-            numValue = numValue / 100;
+      // Bersihkan pesan error & remove shake
+      document.querySelectorAll('.error-message').forEach(el => el.style.display = 'none');
+      document.querySelectorAll('input, select').forEach(el => {
+        el.classList.remove('input-error');
+        el.classList.remove('shake');
+      });
+
+      // Validasi setiap elemen required
+      form.querySelectorAll('[required]').forEach(el => {
+        const id = el.getAttribute('id') || el.getAttribute('name');
+        if (el.type === 'radio') {
+          const name = el.getAttribute('name');
+          const checked = form.querySelector(`input[name="${name}"]:checked`);
+          if (!checked) {
+            document.getElementById(`error-${name}`).style.display = 'block';
+            valid = false;
+            // Tambahkan shake pada grup radio (ambil parent)
+            const group = form.querySelector(`input[name="${name}"]`).closest('fieldset') || form;
+            group.classList.add('shake');
+            setTimeout(() => group.classList.remove('shake'), 350);
           }
-          data[key] = numValue;
-        } else {
-          data[key] = value.trim();
+        } else if (!el.value.trim()) {
+          document.getElementById(`error-${id}`).style.display = 'block';
+          el.classList.add('input-error', 'shake');
+          valid = false;
+          setTimeout(() => el.classList.remove('shake'), 350);
+        } else if (el.type === 'number') {
+          const val = parseFloat(el.value);
+          const min = parseFloat(el.getAttribute('min'));
+          const max = parseFloat(el.getAttribute('max'));
+          if (!isNaN(min) && val < min) {
+            document.getElementById(`error-${id}`).style.display = 'block';
+            el.classList.add('input-error', 'shake');
+            valid = false;
+            setTimeout(() => el.classList.remove('shake'), 350);
+          }
+          if (!isNaN(max) && val > max) {
+            document.getElementById(`error-${id}`).style.display = 'block';
+            el.classList.add('input-error', 'shake');
+            valid = false;
+            setTimeout(() => el.classList.remove('shake'), 350);
+          }
         }
       });
 
+      if (!valid) {
+        // Scroll ke pesan error pertama
+        const firstError = document.querySelector('.error-message[style*="display: block"]');
+        if (firstError) {
+          firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+        return;
+      }
+
+      // Matikan tombol dan tampilkan spinner
+      submitBtn.disabled = true;
+      const originalBtnText = submitBtn.textContent;
+      submitBtn.innerHTML = 'Memproses <span class="spinner"></span>';
+
+      // Kumpulkan data
+      const formData = new FormData(form);
+      let data = {};
+
+      formData.forEach((value, key) => {
+        // Map kategori ke desimal jika mode general
+        if (key === 'FCVC_category') {
+          const mapFCVC = { '1': 1.0, '2': 2.5, '3': 4.0, '4': 7.0 };
+          data['FCVC'] = mapFCVC[value];
+        } else if (key === 'NCP_category') {
+          const mapNCP = { '1': 1.0, '2': 2.0, '3': 3.0, '4': 4.0, '5': 5.0 };
+          data['NCP'] = mapNCP[value];
+        } else if (key === 'CH2O_category') {
+          const mapCH2O = { '1': 0.5, '2': 1.5, '3': 2.5, '4': 3.5, '5': 5.0 };
+          data['CH2O'] = mapCH2O[value];
+        } else if (key === 'FAF_category') {
+          const mapFAF = { '1': 0.5, '2': 2.0, '3': 4.0, '4': 6.0 };
+          data['FAF'] = mapFAF[value];
+        } else if (key === 'TUE_category') {
+          const mapTUE = { '1': 0.5, '2': 2.0, '3': 4.0, '4': 6.0 };
+          data['TUE'] = mapTUE[value];
+        } else {
+          if (['Age', 'Height', 'Weight', 'FCVC', 'NCP', 'CH2O', 'FAF', 'TUE'].includes(key)) {
+            let numValue = Number(value);
+            if (key === 'Height') numValue = numValue / 100;
+            data[key] = numValue;
+          } else {
+            data[key] = value.trim();
+          }
+        }
+      });
+
+      // Kirim data ke server
       try {
         const response = await fetch('https://deploybengkod-production.up.railway.app/predict', {
           method: 'POST',
@@ -226,14 +667,30 @@
           body: JSON.stringify(data)
         });
         const result = await response.json();
+
+        // Tampilkan hasil
         resultDiv.style.display = 'block';
-        resultDiv.textContent = result.prediction ? 
-          `Prediksi Tingkat Obesitas: ${result.prediction}` : 
-          `Error: ${result.detail || 'Terjadi kesalahan'}`;
+        if (result.prediction) {
+          resultDiv.innerHTML = `
+            🎉 Prediksi Tingkat Obesitas: <strong>${result.prediction}</strong><br>
+            <small>Disarankan untuk berkonsultasi dengan tenaga medis atau ahli gizi untuk rekomendasi lebih lanjut.</small>`;
+          // Tambahkan pulse animation
+          resultDiv.classList.add('pulse');
+          setTimeout(() => resultDiv.classList.remove('pulse'), 1000);
+        } else {
+          resultDiv.textContent = `⚠️ Error: ${result.detail || 'Terjadi kesalahan'}`;
+        }
       } catch (err) {
         resultDiv.style.display = 'block';
-        resultDiv.textContent = 'Terjadi kesalahan: ' + err.message;
+        resultDiv.textContent = `⚠️ Terjadi kesalahan: ${err.message}`;
+      } finally {
+        // Pulihkan tombol
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalBtnText;
       }
+
+      // Scroll ke hasil
+      resultDiv.scrollIntoView({ behavior: 'smooth' });
     });
   </script>
 </body>
