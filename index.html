@@ -207,11 +207,14 @@
       const formData = new FormData(form);
       let data = {};
       formData.forEach((value, key) => {
-        // Kolom numerik yang dikonversi ke number
         if (['Age','Height','Weight','FCVC','NCP','CH2O','FAF','TUE'].includes(key)) {
-          data[key] = Number(value);
+          let numValue = Number(value);
+          // Konversi tinggi dari cm ke meter
+          if (key === 'Height') {
+            numValue = numValue / 100;
+          }
+          data[key] = numValue;
         } else {
-          // Kolom kategorikal tetap string (yes/no, pilihan dropdown)
           data[key] = value.trim();
         }
       });
