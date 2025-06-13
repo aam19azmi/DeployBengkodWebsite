@@ -671,10 +671,39 @@
         // Tampilkan hasil
         resultDiv.style.display = 'block';
         if (result.prediction) {
+          let description = '';
+          switch (result.prediction) {
+            case 'Berat Badan Kurang':
+              description = 'Berat badan Anda berada di bawah normal. Perhatikan asupan nutrisi dan pertimbangkan konsultasi dengan ahli gizi.';
+              break;
+            case 'Berat Badan Normal':
+              description = 'Berat badan Anda berada dalam rentang normal. Pertahankan pola hidup sehat dan aktif.';
+              break;
+            case 'Kelebihan Berat Badan Tingkat I':
+              description = 'Tanda awal kelebihan berat badan. Disarankan mulai menjaga pola makan dan aktivitas fisik.';
+              break;
+            case 'Kelebihan Berat Badan Tingkat II':
+              description = 'Berat badan Anda melebihi batas sehat. Mulailah dengan pola hidup sehat dan konsultasi dengan profesional.';
+              break;
+            case 'Obesitas Tipe I':
+              description = 'Anda termasuk dalam kategori obesitas tipe I. Sangat disarankan untuk berkonsultasi dengan tenaga medis.';
+              break;
+            case 'Obesitas Tipe II':
+              description = 'Obesitas tipe II menunjukkan risiko kesehatan yang lebih tinggi. Segera lakukan evaluasi gaya hidup dan hubungi tenaga medis.';
+              break;
+            case 'Obesitas Tipe III':
+              description = 'Ini adalah tingkat obesitas tertinggi. Penting untuk segera mencari bantuan medis untuk penanganan yang tepat.';
+              break;
+            default:
+              description = 'Kategori tidak diketahui. Silakan coba lagi atau konsultasi dengan ahli.';
+          }
+
           resultDiv.innerHTML = `
             🎉 Prediksi Tingkat Obesitas: <strong>${result.prediction}</strong><br>
+            <small>${description}</small><br>
             <small>Disarankan untuk berkonsultasi dengan tenaga medis atau ahli gizi untuk rekomendasi lebih lanjut.</small>`;
-          // Tambahkan pulse animation
+          
+          resultDiv.style.display = 'block';
           resultDiv.classList.add('pulse');
           setTimeout(() => resultDiv.classList.remove('pulse'), 1000);
         } else {
