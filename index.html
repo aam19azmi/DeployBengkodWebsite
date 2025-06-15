@@ -630,34 +630,50 @@
       // Kumpulkan data
       const formData = new FormData(form);
       let data = {};
+      const mode = document.querySelector('input[name="inputMode"]:checked').value;
 
-      formData.forEach((value, key) => {
-        // Map kategori ke desimal jika mode general
-        if (key === 'FCVC_category') {
-          const mapFCVC = { '1': 1.0, '2': 2.5, '3': 4.0, '4': 7.0 };
-          data['FCVC'] = mapFCVC[value];
-        } else if (key === 'NCP_category') {
-          const mapNCP = { '1': 1.0, '2': 2.0, '3': 3.0, '4': 4.0, '5': 5.0 };
-          data['NCP'] = mapNCP[value];
-        } else if (key === 'CH2O_category') {
-          const mapCH2O = { '1': 0.5, '2': 1.5, '3': 2.5, '4': 3.5, '5': 5.0 };
-          data['CH2O'] = mapCH2O[value];
-        } else if (key === 'FAF_category') {
-          const mapFAF = { '1': 0.5, '2': 2.0, '3': 4.0, '4': 6.0 };
-          data['FAF'] = mapFAF[value];
-        } else if (key === 'TUE_category') {
-          const mapTUE = { '1': 0.5, '2': 2.0, '3': 4.0, '4': 6.0 };
-          data['TUE'] = mapTUE[value];
-        } else {
+      // PROSES DATA BERDASARKAN MODE YANG AKTIF
+      if (mode === 'expert') {
+        // Mode Ahli: Gunakan input numerik langsung
+        formData.forEach((value, key) => {
           if (['Age', 'Height', 'Weight', 'FCVC', 'NCP', 'CH2O', 'FAF', 'TUE'].includes(key)) {
             let numValue = Number(value);
-            if (key === 'Height') numValue = numValue / 100;
+            if (key === 'Height') numValue = numValue / 100; // Konversi cm ke m
             data[key] = numValue;
           } else {
             data[key] = value.trim();
           }
-        }
-      });
+        });
+      } else {
+        // Mode Umum: Map kategori ke nilai numerik
+        formData.forEach((value, key) => {
+          // Map kategori ke desimal jika mode general
+          if (key === 'FCVC_category') {
+            const mapFCVC = { '1': 1.0, '2': 2.5, '3': 4.0, '4': 7.0 };
+            data['FCVC'] = mapFCVC[value];
+          } else if (key === 'NCP_category') {
+            const mapNCP = { '1': 1.0, '2': 2.0, '3': 3.0, '4': 4.0, '5': 5.0 };
+            data['NCP'] = mapNCP[value];
+          } else if (key === 'CH2O_category') {
+            const mapCH2O = { '1': 0.5, '2': 1.5, '3': 2.5, '4': 3.5, '5': 5.0 };
+            data['CH2O'] = mapCH2O[value];
+          } else if (key === 'FAF_category') {
+            const mapFAF = { '1': 0.5, '2': 2.0, '3': 4.0, '4': 6.0 };
+            data['FAF'] = mapFAF[value];
+          } else if (key === 'TUE_category') {
+            const mapTUE = { '1': 0.5, '2': 2.0, '3': 4.0, '4': 6.0 };
+            data['TUE'] = mapTUE[value];
+          } else {
+            if (['Age', 'Height', 'Weight'].includes(key)) {
+              let numValue = Number(value);
+              if (key === 'Height') numValue = numValue / 100;
+              data[key] = numValue;
+            } else {
+              data[key] = value.trim();
+            }
+          }
+        });
+      }
 
       // Kirim data ke server
       try {
