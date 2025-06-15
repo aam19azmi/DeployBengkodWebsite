@@ -1,0 +1,217 @@
+/* ========== Main Stylesheet for Prediction App ========== */
+/* ========== Global Styles ========== */
+* {
+    box-sizing: border-box;
+}
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background: #eef2f7;
+    margin: 0;
+    padding: 40px 0;
+    display: flex;
+    justify-content: center;
+    overflow-x: hidden;
+}
+.container {
+    background: white;
+    width: 100%;
+    max-width: 800px;
+    border-radius: 12px;
+    padding: 30px 40px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+h1 {
+    text-align: center;
+    color: #007bff;
+    margin-bottom: 20px;
+    font-size: 2rem;
+}
+.toggle-mode {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 25px;
+}
+.toggle-mode label {
+    margin-right: 20px;
+    font-weight: 600;
+    cursor: pointer;
+    color: #333;
+}
+fieldset {
+    border: none;
+    margin-bottom: 25px;
+    padding: 0;
+}
+legend {
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #333;
+    font-size: 1.2rem;
+    border-bottom: 2px solid #ccc;
+    padding-bottom: 5px;
+}
+label {
+    display: block;
+    margin-top: 15px;
+    font-weight: 500;
+    color: #444;
+    font-size: 0.95rem;
+}
+label .info {
+    font-weight: normal;
+    font-style: italic;
+    color: #666;
+    font-size: 0.85rem;
+}
+label .tooltip-icon {
+    margin-left: 4px;
+    color: #007bff;
+    cursor: help;
+    font-style: normal;
+}
+input, select {
+    width: 100%;
+    padding: 12px;
+    margin-top: 5px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+    transition: border 0.2s;
+}
+input:focus, select:focus {
+    outline: none;
+    border-color: #007bff;
+}
+.radio-group {
+    margin-top: 5px;
+}
+.radio-group label {
+    display: inline-block;
+    margin-right: 20px;
+    font-weight: normal;
+    color: #444;
+    cursor: pointer;
+}
+.radio-group input {
+    margin-right: 6px;
+}
+.helper-text {
+    color: #666;
+    font-size: 0.85rem;
+    margin-top: 3px;
+}
+.error-message {
+    color: #c82333;
+    font-size: 0.85rem;
+    margin-top: 5px;
+    display: none;
+}
+/* Shake animation for invalid input */
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    20%, 60%  { transform: translateX(-6px); }
+    40%, 80%  { transform: translateX(6px); }
+}
+.shake {
+    animation: shake 0.35s ease-in-out;
+}
+.input-error {
+    border-color: #c82333 !important;
+}
+/* Button */
+button {
+    width: 100%;
+    padding: 14px;
+    margin-top: 20px;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: background 0.2s ease-in-out;
+    position: relative;
+}
+button:hover {
+    background: #0056b3;
+}
+button:disabled {
+    background: #999;
+    cursor: not-allowed;
+}
+/* Spinner for loading */
+.spinner {
+    border: 3px solid rgba(255, 255, 255, 0.5);
+    border-top: 3px solid white;
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    animation: spin 1s linear infinite;
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 8px;
+}
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+/* ========== Slide-Toggle Sections ========== */
+.numeric-section,
+.category-section {
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: max-height 0.4s ease, opacity 0.4s ease;
+}
+.numeric-section.visible,
+.category-section.visible {
+    max-height: 1000px; /* cukup besar agar seluruh content bisa tampil */
+    opacity: 1;
+}
+/* ========== Prediction Result Styles ========== */
+#result {
+    margin-top: 25px;
+    padding: 20px;
+    background: #f0f8ff;
+    border: 2px solid #007bff;
+    border-radius: 8px;
+    color: #004085;
+    font-weight: bold;
+    font-size: 1.1rem;
+    display: none;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeInUp 0.6s forwards;
+}
+/* Fade-in Up keyframes */
+@keyframes fadeInUp {
+    to {
+    opacity: 1;
+    transform: translateY(0);
+    }
+}
+/* Pulse animation when result appears */
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.02); }
+    100% { transform: scale(1); }
+}
+.pulse {
+    animation: pulse 1s ease-in-out;
+}
+/* ========== Responsive Adjustments ========== */
+@media (max-width: 480px) {
+    .container {
+    padding: 20px;
+    }
+    h1 {
+    font-size: 1.5rem;
+    }
+    label {
+    font-size: 0.9rem;
+    }
+    input, select, button {
+    font-size: 0.95rem;
+    }
+}
+  
