@@ -6,7 +6,7 @@
 
 Website interaktif untuk memprediksi tingkat risiko obesitas seseorang menggunakan Machine Learning. Repositori ini berisi **User Interface (Frontend)** yang bertugas mengumpulkan input pengguna, memvalidasi data, dan mengirimkannya ke Backend API.
 
-🌐 **Live Demo:** [weightdetection.sourcecodejournal.dev][(https://weightdetection.sourcecodejournal.dev)](https://weightdetection.sourcecodejournal.dev/)
+🌐 **Live Demo:** [(https://weightdetection.sourcecodejournal.dev)](https://weightdetection.sourcecodejournal.dev/)
 🔌 **Backend Repository:** [DeployBengkod (API)](https://github.com/aam19azmi/DeployBengkod)
 
 ---
