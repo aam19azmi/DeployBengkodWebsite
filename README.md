@@ -4,6 +4,7 @@
 ![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)
 ![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
 
+![Project Banner](https://sourcecodejournal.dev/assets/projects/Prediksi_Tingkat_Obesitas_Kalkulator_Kesehatan_Berat_Badan.png)
 Website interaktif untuk memprediksi tingkat risiko obesitas seseorang menggunakan Machine Learning. Repositori ini berisi **User Interface (Frontend)** yang bertugas mengumpulkan input pengguna, memvalidasi data, dan mengirimkannya ke Backend API.
 
 🌐 **Live Demo:** [(weightdetection.sourcecodejournal.dev)](https://weightdetection.sourcecodejournal.dev/)
